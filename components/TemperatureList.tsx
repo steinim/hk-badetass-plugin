@@ -3,7 +3,7 @@ import { Text, ListItem } from 'native-base';
 import { BadetassContext, useBadetass } from '../BadetassProvider';
 import axios from 'axios';
 import { ScrollView } from 'react-native-gesture-handler';
-import { RefreshControl } from 'react-native';
+import { RefreshControl, Linking } from 'react-native';
 import moment from 'moment';
 
 export const TemperatureList = () => {
@@ -17,7 +17,7 @@ export const TemperatureList = () => {
     }
 
     axios
-      .get('https://prdl-apimgmt.lyse.no/apis/t/prod.altibox.lyse.no/temp/1.0/api/location/', {
+      .get('https://prdl-apimgmt.lyse.no/apis/t/prod.altibox.lyse.no/temp/1.0/api/location', {
         headers: {
           Authorization: `Bearer ${token}`,
           accept: `application/json`,
@@ -51,13 +51,24 @@ export const TemperatureList = () => {
           <RefreshControl refreshing={false} onRefresh={onRefresh} />
         }
       >
-        <Text>Badetemperaturer:</Text>
+        <Text style={{fontWeight: 'bold'}}>Badetemperaturer:</Text>
         {temperatures() &&
           temperatures().length > 2 &&
-          temperatures().map((item, key) => (
+          temperatures()
+          .map((item, key) => (
             <ListItem key={key} accessibilityLabel={item.id + ' knapp'}>
               <Text refresh={shouldRefresh} {...item}></Text>
-              <Text>{item.Name}: {item.lastTemperature} ({moment(item.lastReadingTime).format('DD.MMM HH:mm')})</Text>
+              <Text style={{fontWeight: 'bold'}}>{item.Name}:&nbsp;
+              <Text style={{color: 'red'}}>
+                {item.lastTemperature} °C{'\n'}
+                <Text style={{fontWeight: 'normal'}}>Sist målt {moment(item.lastReadingTime).format('DD.MM.YYYY [kl.] HH:mm')}{'\n'}</Text>
+                <Text style={{color: 'blue', fontWeight: 'normal'}}
+                      // tslint:disable-next-line: max-line-length
+                      onPress={ () => Linking.openURL('https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=' + item.GPSLat + ',' + item.GPSLong) } >
+                  Vis i kart
+                </Text>
+              </Text>
+              </Text>
             </ListItem>
           ))}
       </ScrollView>

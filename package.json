@@ -5,9 +5,7 @@
     "author": "Stein Inge Morisbak",
     "license": "MIT",
     "main": "pages/Badetass.tsx",
-    "dependencies": {
-        "babel-plugin-dotenv-import": "^2.1.0"
-    },
+    "dependencies": {},
     "plugin": {
         "name": "Badetassen",
         "icon": "",

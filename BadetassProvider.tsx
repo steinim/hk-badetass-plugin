@@ -1,7 +1,6 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react';
 import { AsyncStorage } from 'react-native';
 import axios from 'axios';
-import { CLIENT_ID, CLIENT_SECRET } from '@env';
 
 const BadetassContext = React.createContext({ });
 
@@ -24,8 +23,8 @@ export const BadetassProvider = (props: Props) => {
 
     const params = new URLSearchParams();
     params.append('grant_type', 'client_credentials');
-    params.append('client_id', CLIENT_ID);
-    params.append('client_secret', CLIENT_SECRET);
+    params.append('client_id', 'ID');
+    params.append('client_secret', 'SECRET');
 
     return await axios
       .post(`https://prdl-apimgmt.lyse.no/apis/token`, params, {

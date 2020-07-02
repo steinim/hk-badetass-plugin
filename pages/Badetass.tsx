@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Container, Text } from 'native-base';
-import BadetassProvider, { useBadetass } from '../BadetassProvider';
+import { View, Container } from 'native-base';
+import BadetassProvider from '../BadetassProvider';
 import { StyleSheet } from 'react-native';
 import { typography } from 'styles';
 import BadetassLogo from '../assets/BadetassLogo';
