@@ -4,10 +4,10 @@
     "description": "Badetassen – badetemperaturer fra hele Norge",
     "author": "Stein Inge Morisbak",
     "license": "MIT",
-    "main": "pages/Badetassen.tsx",
+    "main": "pages/Badetass.tsx",
     "dependencies": {},
     "plugin": {
-        "name": "Badetassen plugin",
+        "name": "Badetassen",
         "icon": "",
         "description": "Vis badetemperaturer fra badetassen.no"
       }
