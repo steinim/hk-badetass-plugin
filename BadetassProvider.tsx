@@ -1,7 +1,7 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react';
 import { AsyncStorage } from 'react-native';
 import axios from 'axios';
-import { CLIENT_ID, CLIENT_SECRET } from 'react-native-dotenv';
+import { CLIENT_ID, CLIENT_SECRET } from '@env';
 
 const BadetassContext = React.createContext({ });
 
