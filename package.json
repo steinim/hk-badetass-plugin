@@ -10,5 +10,9 @@
         "name": "Badetassen",
         "icon": "",
         "description": "Vis badetemperaturer fra badetassen.no"
-      }
-  }
+    },
+    "devDependencies": {
+        "metro-react-native-babel-preset": "^0.60.0",
+        "react-native-dotenv": "^0.2.0"
+    }
+}
