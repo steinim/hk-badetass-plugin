@@ -51,7 +51,6 @@ export const TemperatureList = () => {
           <RefreshControl refreshing={false} onRefresh={onRefresh} />
         }
       >
-        <Text style={{fontWeight: 'bold'}}>Badetemperaturer:</Text>
         {temperatures() &&
           temperatures().length > 2 &&
           temperatures()
