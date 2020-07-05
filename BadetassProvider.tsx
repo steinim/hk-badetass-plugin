@@ -18,6 +18,7 @@ export interface Token {
 export const BadetassProvider = (props: Props) => {
   const [token, setToken] = useState({} as Token);
   const [temperatureState, setTemperatureState] = useState([]);
+  const [areasState, setAreasState] = useState([]);
 
   const getToken = async () => {
 
@@ -49,12 +50,27 @@ export const BadetassProvider = (props: Props) => {
       try {
         await AsyncStorage.setItem('temperatureState', JSON.stringify(c));
       } catch (error) {
-        // Error saving data
         console.log('save error', error);
       }
     };
     _storeData(temps);
     setTemperatureState(temps);
+  };
+
+  const areas = () => {
+    return areasState;
+  };
+
+  const setAreas = (as) => {
+    const _storeData = async (c) => {
+      try {
+        await AsyncStorage.setItem('areasState', JSON.stringify(c));
+      } catch (error) {
+        console.log('save error', error);
+      }
+    };
+    _storeData(as);
+    setAreasState(as);
   };
 
   const authToken = () => {
@@ -64,22 +80,37 @@ export const BadetassProvider = (props: Props) => {
   useEffect(() => {
     getToken();
     const loadToken = async () => {
+      console.log('loading token');
       const data = await AsyncStorage.getItem('badetass-token');
       if (!!data) {
         const t = JSON.parse(data) as Token;
+        console.log('setting token');
         setToken(t);
       }
     };
     loadToken();
 
     const loadTemperatures = async () => {
+      console.log('loading temperatures');
       const data = await AsyncStorage.getItem('temperatureState');
       if (!!data) {
         const t = JSON.parse(data);
+        console.log('setting temperatures');
         setTemperatures(t);
       }
     };
     loadTemperatures();
+
+    const loadAreas = async () => {
+      console.log('loading areas');
+      const data = await AsyncStorage.getItem('areasState');
+      if (!!data) {
+        const t = JSON.parse(data);
+        console.log('setting areas');
+        setAreas(t);
+      }
+    };
+    loadAreas();
   }, []);
 
   const value = useMemo(() => {
@@ -87,8 +118,10 @@ export const BadetassProvider = (props: Props) => {
       authToken,
       temperatures,
       setTemperatures,
+      areas,
+      setAreas,
     };
-  }, [token, temperatureState]);
+  }, [token, temperatureState, areasState]);
 
   return (
     <BadetassContext.Provider value={value}>

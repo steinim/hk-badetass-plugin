@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Text, ListItem } from 'native-base';
+import { Text, ListItem, Icon } from 'native-base';
 import { BadetassContext, useBadetass } from '../BadetassProvider';
-import axios from 'axios';
 import { ScrollView } from 'react-native-gesture-handler';
 import { RefreshControl, Linking } from 'react-native';
+import axios from 'axios';
 import moment from 'moment';
 
 export const TemperatureList = () => {
@@ -17,7 +17,7 @@ export const TemperatureList = () => {
     }
 
     axios
-      .get('https://prdl-apimgmt.lyse.no/apis/t/prod.altibox.lyse.no/temp/1.0/api/location', {
+      .get('https://prdl-apimgmt.lyse.no/apis/t/prod.altibox.lyse.no/temp/1.0/api/location/', {
         headers: {
           Authorization: `Bearer ${token}`,
           accept: `application/json`,
@@ -30,6 +30,7 @@ export const TemperatureList = () => {
         console.log('error fetching temperatures', err);
       });
   };
+
   useEffect(() => {
     if (!temperatures() || temperatures().length < 1) {
       fetchTemperatures();
@@ -52,19 +53,20 @@ export const TemperatureList = () => {
         }
       >
         {temperatures() &&
-          temperatures().length > 2 &&
+          temperatures().length > 0 &&
           temperatures()
           .map((item, key) => (
-            <ListItem key={key} accessibilityLabel={item.id + ' knapp'}>
+            <ListItem key={key} accessibilityLabel={item.id + ' item'}>
               <Text refresh={shouldRefresh} {...item}></Text>
               <Text style={{fontWeight: 'bold'}}>{item.Name}:&nbsp;
               <Text style={{color: 'red'}}>
                 {item.lastTemperature} °C{'\n'}
                 <Text style={{fontWeight: 'normal'}}>Sist målt {moment(item.lastReadingTime).format('DD.MM.YYYY [kl.] HH:mm')}{'\n'}</Text>
+                <Icon name="pin" style={{ fontSize: 18 }} />
                 <Text style={{color: 'blue', fontWeight: 'normal'}}
                       // tslint:disable-next-line: max-line-length
                       onPress={ () => Linking.openURL('https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=' + item.GPSLat + ',' + item.GPSLong) } >
-                  Vis i kart
+                  &nbsp;Vis i kart
                 </Text>
               </Text>
               </Text>

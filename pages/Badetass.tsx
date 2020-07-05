@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, Container } from 'native-base';
+import { View, Container, Text } from 'native-base';
 import BadetassProvider from '../BadetassProvider';
 import { StyleSheet } from 'react-native';
 import { typography } from 'styles';
 import BadetassLogo from '../assets/BadetassLogo';
-import Badetemperaturer from '../components/TemperatureList';
+import TemperatureList from '../components/TemperatureList';
+import AreaSelector from '../components/AreaSelector';
 
 const styles = StyleSheet.create({
   title: {
@@ -20,7 +21,12 @@ export const Badetass = () => {
       <View style={{ marginBottom: 20 }}>
         <BadetassLogo />
       </View>
-      <Badetemperaturer />
+      <View>
+        <AreaSelector />
+      </View>
+      <View>
+        <TemperatureList />
+      </View>
       </Container>
     </BadetassProvider>
   );
