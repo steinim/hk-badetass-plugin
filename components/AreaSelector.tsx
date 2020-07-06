@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { View } from 'native-base';
-import { useBadetass } from '../BadetassProvider';
+import { BadetassContext, useBadetass } from '../BadetassProvider';
 import DropDownPicker from 'react-native-dropdown-picker';
 import axios from 'axios';
 
@@ -39,7 +39,8 @@ export const AreaSelector = () => {
   }, [areas, authToken]);
 
   return (
-    <View>
+    <BadetassContext.Consumer>
+    {() => (
       <View>
         <DropDownPicker
           items={areas()}
@@ -48,10 +49,11 @@ export const AreaSelector = () => {
           searchableError="Ingen badeplasser eller kommuner"
           placeholder="Søk etter badeplass/kommune ..."
           containerStyle={{height: 40}}
-          onChangeItem={item => console.log('selected ', item)}
+          onChangeItem={(item: string) => console.log('selected ', item)}
         ></DropDownPicker>
       </View>
-    </View>
+    )}
+    </BadetassContext.Consumer>
   );
 };
 
