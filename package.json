@@ -5,6 +5,7 @@
     "author": "Stein Inge Morisbak",
     "license": "MIT",
     "main": "pages/Badetass.tsx",
+    "repository": "git@github.com:steinim/hk-badetass-plugin.git",
     "dependencies": {
         "react-native-dropdown-picker": "^3.0.5"
     },
