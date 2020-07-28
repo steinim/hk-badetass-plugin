@@ -19,13 +19,15 @@ export const BadetassProvider = (props: Props) => {
   const [token, setToken] = useState({} as Token);
   const [temperatureState, setTemperatureState] = useState([]);
   const [areasState, setAreasState] = useState([]);
+  const [selectedAreaState, setSelectedAreaState] = useState([]);
+  const [previousAreaState, setPreviousAreaState] = useState([]);
 
   const getToken = async () => {
 
     const params = new URLSearchParams();
     params.append('grant_type', 'client_credentials');
-    params.append('client_id', 'ID');
-    params.append('client_secret', 'SECRET');
+    params.append('client_id', '<secret>');
+    params.append('client_secret', '<secret>');
 
     return await axios
       .post(`https://prdl-apimgmt.lyse.no/apis/token`, params, {
@@ -39,22 +41,6 @@ export const BadetassProvider = (props: Props) => {
         return e.data;
       })
       .catch((err) => console.log('error', err));
-  };
-
-  const temperatures = () => {
-    return temperatureState;
-  };
-
-  const setTemperatures = (temps) => {
-    const _storeData = async (c) => {
-      try {
-        await AsyncStorage.setItem('temperatureState', JSON.stringify(c));
-      } catch (error) {
-        console.log('save error', error);
-      }
-    };
-    _storeData(temps);
-    setTemperatureState(temps);
   };
 
   const areas = () => {
@@ -73,6 +59,56 @@ export const BadetassProvider = (props: Props) => {
     setAreasState(as);
   };
 
+  const previousArea = () => {
+    return previousAreaState;
+  };
+
+  const setPreviousArea = (pa) => {
+    const _storeData = async (c) => {
+      try {
+        let thePreviousArea = '[' + JSON.stringify(c) + ']';
+        await AsyncStorage.setItem('previousAreaState', thePreviousArea);
+      } catch (error) {
+        console.log('save error', error);
+      }
+    };
+    _storeData(pa);
+    setPreviousAreaState(pa);
+  };
+
+  const selectedArea = () => {
+    return selectedAreaState;
+  };
+
+  const setSelectedArea = (sa) => {
+    const _storeData = async (c) => {
+      try {
+        let theArea = '[' + JSON.stringify(c) + ']';
+        await AsyncStorage.setItem('selectedAreaState', theArea);
+      } catch (error) {
+        console.log('save error', error);
+      }
+    };
+    _storeData(sa);
+    setSelectedAreaState(sa);
+  };
+
+  const temperatures = () => {
+    return temperatureState;
+  };
+
+  const setTemperatures = (temps) => {
+    const _storeData = async (c) => {
+      try {
+        await AsyncStorage.setItem('temperatureState', JSON.stringify(c));
+      } catch (error) {
+        console.log('save error', error);
+      }
+    };
+    _storeData(temps);
+    setTemperatureState(temps);
+  };
+
   const authToken = () => {
     return token.access_token;
   };
@@ -80,37 +116,50 @@ export const BadetassProvider = (props: Props) => {
   useEffect(() => {
     getToken();
     const loadToken = async () => {
-      console.log('loading token');
       const data = await AsyncStorage.getItem('badetass-token');
       if (!!data) {
-        const t = JSON.parse(data) as Token;
-        console.log('setting token');
-        setToken(t);
+        const tkn = JSON.parse(data) as Token;
+        setToken(tkn);
       }
     };
     loadToken();
 
+    const loadAreas = async () => {
+      const data = await AsyncStorage.getItem('areasState');
+      if (!!data) {
+        const ars = JSON.parse(data);
+        setAreas(ars);
+      }
+    };
+    loadAreas();
+
+    const loadPreviousArea = async () => {
+      const data = await AsyncStorage.getItem('previousAreaState');
+      if (!!data) {
+        const pas = JSON.parse(data);
+        setPreviousArea(pas);
+      }
+    };
+    loadPreviousArea();
+
+    const loadSelectedArea = async () => {
+      const data = await AsyncStorage.getItem('selectedAreaState');
+      if (!!data) {
+        const sars = JSON.parse(data);
+        setSelectedArea(sars);
+      }
+    };
+    loadSelectedArea();
+
     const loadTemperatures = async () => {
-      console.log('loading temperatures');
       const data = await AsyncStorage.getItem('temperatureState');
       if (!!data) {
-        const t = JSON.parse(data);
-        console.log('setting temperatures');
-        setTemperatures(t);
+        const tmps = JSON.parse(data);
+        setTemperatures(tmps);
       }
     };
     loadTemperatures();
 
-    const loadAreas = async () => {
-      console.log('loading areas');
-      const data = await AsyncStorage.getItem('areasState');
-      if (!!data) {
-        const t = JSON.parse(data);
-        console.log('setting areas');
-        setAreas(t);
-      }
-    };
-    loadAreas();
   }, []);
 
   const value = useMemo(() => {
@@ -120,8 +169,12 @@ export const BadetassProvider = (props: Props) => {
       setTemperatures,
       areas,
       setAreas,
+      previousArea,
+      setPreviousArea,
+      selectedArea,
+      setSelectedArea,
     };
-  }, [token, temperatureState, areasState]);
+  }, [token, temperatureState, areasState, previousAreaState, selectedAreaState]);
 
   return (
     <BadetassContext.Provider value={value}>

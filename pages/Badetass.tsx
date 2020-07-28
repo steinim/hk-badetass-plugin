@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Container, Text } from 'native-base';
+import { View, Container } from 'native-base';
 import BadetassProvider from '../BadetassProvider';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import { typography } from 'styles';
 import BadetassLogo from '../assets/BadetassLogo';
 import TemperatureList from '../components/TemperatureList';
@@ -21,7 +21,12 @@ export const Badetass = () => {
       <View style={{ marginBottom: 20 }}>
         <BadetassLogo />
       </View>
-      <View>
+      <View
+          style={{
+              ...(Platform.OS !== 'android' && {
+                zIndex: 10,
+              }),
+            }}>
         <AreaSelector />
       </View>
       <View>
