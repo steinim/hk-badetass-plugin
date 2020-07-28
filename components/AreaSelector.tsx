@@ -50,7 +50,6 @@ export const AreaSelector = () => {
               placeholder="Søk etter kommune ..."
               containerStyle={{ height: 40 }}
               onChangeItem={item => setSelectedArea(item)}
-              onClose={() => { console.log('closed'); }}
             ></DropDownPicker>
           </View>
         </View>
