@@ -21,7 +21,7 @@ export const AreaSelector = () => {
       })
       .then((e) => {
         let areasArray = e.data.map(function (item) {
-          return { value: item.id, label: item.Name };
+          return { value: item.id, label: item.Name, partnerId: item.Partner_id };
         });
         areasArray.unshift({ value: 9999, label: 'Vis alle'});
         setAreas(areasArray);
@@ -39,9 +39,12 @@ export const AreaSelector = () => {
   return (
     <BadetassContext.Consumer>
       {() => (
-        <View>
-          <View>
-            <DropDownPicker
+        <View style={{
+                  ...(Platform.OS !== 'android' && {
+                    zIndex: 10,
+                  }),
+                }}>
+          <DropDownPicker
               items={areas()}
               dropDownMaxHeight={300}
               searchable={true}
@@ -50,8 +53,7 @@ export const AreaSelector = () => {
               placeholder="Søk etter kommune ..."
               containerStyle={{ height: 40 }}
               onChangeItem={item => setSelectedArea(item)}
-            ></DropDownPicker>
-          </View>
+          ></DropDownPicker>
         </View>
       )}
     </BadetassContext.Consumer>

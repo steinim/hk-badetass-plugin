@@ -21,6 +21,7 @@ export const BadetassProvider = (props: Props) => {
   const [areasState, setAreasState] = useState([]);
   const [selectedAreaState, setSelectedAreaState] = useState([]);
   const [previousAreaState, setPreviousAreaState] = useState([]);
+  const [partnerLogoState, setPartnerLogoState] = useState([]);
 
   const getToken = async () => {
 
@@ -109,9 +110,28 @@ export const BadetassProvider = (props: Props) => {
     setTemperatureState(temps);
   };
 
+  const partnerLogo = () => {
+    return partnerLogoState;
+  };
+
+  const setPartnerLogo = (pl) => {
+    const _storeData = async (c) => {
+      try {
+        let thePartnerLogo = c;
+        console.log('received partner logo:', thePartnerLogo);
+        await AsyncStorage.setItem('partnerLogoState', thePartnerLogo);
+      } catch (error) {
+        console.log('save error', error);
+      }
+    };
+    _storeData(pl);
+    setPartnerLogoState(pl);
+  };
+
   const authToken = () => {
     return token.access_token;
   };
+
 
   useEffect(() => {
     getToken();
@@ -160,6 +180,15 @@ export const BadetassProvider = (props: Props) => {
     };
     loadTemperatures();
 
+    const loadPartnerLogo = async () => {
+      const data = await AsyncStorage.getItem('partnerLogo');
+      if (!!data) {
+        const pl = JSON.parse(data);
+        setPartnerLogo(pl);
+      }
+    };
+    loadPartnerLogo();
+
   }, []);
 
   const value = useMemo(() => {
@@ -170,11 +199,13 @@ export const BadetassProvider = (props: Props) => {
       areas,
       setAreas,
       previousArea,
+      partnerLogo,
       setPreviousArea,
       selectedArea,
       setSelectedArea,
+      setPartnerLogo
     };
-  }, [token, temperatureState, areasState, previousAreaState, selectedAreaState]);
+  }, [token, temperatureState, areasState, previousAreaState, selectedAreaState, partnerLogoState]);
 
   return (
     <BadetassContext.Provider value={value}>
