@@ -118,7 +118,6 @@ export const BadetassProvider = (props: Props) => {
     const _storeData = async (c) => {
       try {
         let thePartnerLogo = c;
-        console.log('received partner logo:', thePartnerLogo);
         await AsyncStorage.setItem('partnerLogoState', thePartnerLogo);
       } catch (error) {
         console.log('save error', error);
@@ -131,7 +130,6 @@ export const BadetassProvider = (props: Props) => {
   const authToken = () => {
     return token.access_token;
   };
-
 
   useEffect(() => {
     getToken();
@@ -203,7 +201,7 @@ export const BadetassProvider = (props: Props) => {
       setPreviousArea,
       selectedArea,
       setSelectedArea,
-      setPartnerLogo
+      setPartnerLogo,
     };
   }, [token, temperatureState, areasState, previousAreaState, selectedAreaState, partnerLogoState]);
 
