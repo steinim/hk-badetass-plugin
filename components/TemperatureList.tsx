@@ -7,7 +7,7 @@ import axios from 'axios';
 import moment from 'moment';
 
 export const TemperatureList = () => {
-  const { authToken, temperatures, setTemperatures, setPreviousArea, previousArea, selectedArea } = useBadetass();
+  const { authToken, temperatures, setTemperatures, setPreviousArea, previousArea, setSelectedArea, selectedArea } = useBadetass();
   const [shouldRefresh, setShouldRefresh] = useState(0);
 
   const fetchTemperatures = async () => {
@@ -21,6 +21,7 @@ export const TemperatureList = () => {
       fetchUrl = 'https://prdl-apimgmt.lyse.no/apis/t/prod.altibox.lyse.no/temp/1.0/api/area/' + selectedArea().label;
     } else {
       console.log('Fetching temperatures from all locations');
+      setSelectedArea({ value: 9999, label: 'Vis alle'});
     }
 
     axios
@@ -47,6 +48,9 @@ export const TemperatureList = () => {
     if (previousArea().label !== selectedArea().label) {
       fetchTemperatures();
       setPreviousArea(selectedArea());
+    } else if (selectedArea().label === undefined) {
+      fetchTemperatures();
+      return () => setSelectedArea({ value: 9999, label: 'Vis alle'});
     }
   }, [previousArea, selectedArea]);
 
