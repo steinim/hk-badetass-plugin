@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Text, ListItem, Icon, View } from 'native-base';
+import { Text, ListItem, Icon } from 'native-base';
 import { BadetassContext, useBadetass } from '../BadetassProvider';
 import { ScrollView } from 'react-native-gesture-handler';
-import { RefreshControl, Linking, Image } from 'react-native';
+import { RefreshControl, Linking } from 'react-native';
 import axios from 'axios';
 import moment from 'moment';
 
 export const TemperatureList = () => {
   const { authToken, temperatures, setTemperatures, setPreviousArea, previousArea, selectedArea } = useBadetass();
   const [shouldRefresh, setShouldRefresh] = useState(0);
-
 
   const fetchTemperatures = async () => {
     let token = authToken();
@@ -49,7 +48,7 @@ export const TemperatureList = () => {
       fetchTemperatures();
       setPreviousArea(selectedArea());
     }
-  }, [temperatures, previousArea, selectedArea, authToken]);
+  }, [previousArea, selectedArea]);
 
   return (
     <BadetassContext.Consumer>

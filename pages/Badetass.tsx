@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Container } from 'native-base';
+import { Container } from 'native-base';
 import BadetassProvider from '../BadetassProvider';
 import TemperatureList from '../components/TemperatureList';
 import AreaSelector from '../components/AreaSelector';

@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Text, ListItem, Icon, View } from 'native-base';
+import React, { useEffect } from 'react';
+import { Text, View } from 'native-base';
+import { Image } from 'react-native';
 import { BadetassContext, useBadetass } from '../BadetassProvider';
-import { ScrollView } from 'react-native-gesture-handler';
-import { RefreshControl, Linking, Image } from 'react-native';
 import axios from 'axios';
-import moment from 'moment';
 
 export const Sponsor = () => {
-  const { authToken, setSelectedArea, selectedArea, setPartnerLogo, partnerLogo } = useBadetass();
+  const { authToken, selectedArea, setPartnerLogo, partnerLogo } = useBadetass();
 
   const fetchPartnerLogo = async (partnerId) => {
     let token = authToken();
@@ -38,7 +36,7 @@ export const Sponsor = () => {
     } else {
       setPartnerLogo('https://www.altibox.no/wp-content/uploads/2016/06/altibox_bokslogo_rgb.png');
     }
-  }, [selectedArea, authToken]);
+  }, [selectedArea]);
 
   return (
     <BadetassContext.Consumer>
