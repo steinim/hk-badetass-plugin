@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View } from 'native-base';
 import { Image } from 'react-native';
 import { BadetassContext, useBadetass } from '../BadetassProvider';
@@ -6,6 +6,7 @@ import axios from 'axios';
 
 export const Sponsor = () => {
   const { authToken, selectedArea, setPartnerLogo, partnerLogo } = useBadetass();
+  const [fetching] = useState();
 
   const fetchPartnerLogo = async (partnerId) => {
     let token = authToken();
@@ -42,7 +43,7 @@ export const Sponsor = () => {
     <BadetassContext.Consumer>
       {() => (
         <View style={{ padding: 20 }}>
-          {partnerLogo()[0] ? (
+          {partnerLogo()[0] && !fetching ? (
           <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             {selectedArea().label && selectedArea().label !== 'Vis alle' ? (
             <Text >Badetemperaturer i {selectedArea().label}</Text>

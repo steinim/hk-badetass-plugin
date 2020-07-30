@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { View } from 'native-base';
+import { Platform } from 'react-native';
 import { BadetassContext, useBadetass } from '../BadetassProvider';
 import DropDownPicker from 'react-native-dropdown-picker';
 import axios from 'axios';

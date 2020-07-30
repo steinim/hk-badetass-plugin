@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Text, ListItem, Icon } from 'native-base';
+import { Text, ListItem, Icon, View } from 'native-base';
 import { BadetassContext, useBadetass } from '../BadetassProvider';
 import { ScrollView } from 'react-native-gesture-handler';
-import { RefreshControl, Linking } from 'react-native';
+import { ActivityIndicator, RefreshControl, Linking, StyleSheet } from 'react-native';
 import axios from 'axios';
 import moment from 'moment';
 
 export const TemperatureList = () => {
   const { authToken, temperatures, setTemperatures, setPreviousArea, previousArea, setSelectedArea, selectedArea } = useBadetass();
   const [shouldRefresh, setShouldRefresh] = useState(0);
+  const [fetching, setShouldFetch] = useState(false);
 
   const fetchTemperatures = async () => {
     let token = authToken();
     if (!token) {
       return;
     }
+    setShouldFetch(true);
     let fetchUrl = 'https://prdl-apimgmt.lyse.no/apis/t/prod.altibox.lyse.no/temp/1.0/api/location/';
     if (selectedArea().label && selectedArea().label !== 'Vis alle') {
       console.log('Fetching temperatures from', selectedArea().label);
@@ -33,6 +35,7 @@ export const TemperatureList = () => {
       })
       .then((e) => {
         setTemperatures(e.data);
+        setShouldFetch(false);
       })
       .catch((err) => {
         console.log('error fetching temperatures', err);
@@ -42,6 +45,7 @@ export const TemperatureList = () => {
     // Increment number just to trigger a refresh
     const increment = shouldRefresh + 1;
     setShouldRefresh(increment);
+    fetchTemperatures();
   };
 
   useEffect(() => {
@@ -54,9 +58,24 @@ export const TemperatureList = () => {
     }
   }, [previousArea, selectedArea]);
 
+  const styles = StyleSheet.create({
+    loading: {
+      alignSelf: 'center',
+    },
+  });
+
   return (
     <BadetassContext.Consumer>
       {() => (
+        <View>
+          {fetching &&
+          <View style={styles.loading}>
+            <Text>{'\n'}</Text>
+            <ActivityIndicator size = "large" color = "#008cc2"/>
+            <Text>{'\n'}Sjekker tempen...</Text>
+          </View>
+          }
+          {!fetching &&
           <ScrollView contentContainerStyle={{paddingBottom: 160}}
             refreshControl={
               <RefreshControl refreshing={false} onRefresh={onRefresh} />
@@ -83,6 +102,8 @@ export const TemperatureList = () => {
                   </ListItem>
                 ))}
           </ScrollView>
+        }
+        </View>
       )}
     </BadetassContext.Consumer>
   );
