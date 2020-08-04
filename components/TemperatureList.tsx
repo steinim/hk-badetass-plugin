@@ -60,6 +60,7 @@ export const TemperatureList = () => {
 
   const styles = StyleSheet.create({
     loading: {
+      justifyContent: 'center',
       alignSelf: 'center',
     },
   });

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View } from 'native-base';
-import { Image } from 'react-native';
+import { Image, StyleSheet } from 'react-native';
 import { BadetassContext, useBadetass } from '../BadetassProvider';
 import axios from 'axios';
 
@@ -39,18 +39,33 @@ export const Sponsor = () => {
     }
   }, [selectedArea]);
 
+  const styles = StyleSheet.create({
+    center: {
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    logo: {
+      width: 240,
+      height: 64,
+      resizeMode: 'contain',
+    },
+    space: {
+      padding: 20,
+    },
+  });
+
   return (
     <BadetassContext.Consumer>
       {() => (
-        <View style={{ padding: 20 }}>
+        <View style={styles.space}>
           {partnerLogo()[0] && !fetching ? (
-          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+          <View style={styles.center}>
             {selectedArea().label && selectedArea().label !== 'Vis alle' ? (
             <Text >Badetemperaturer i {selectedArea().label}</Text>
             ) : <Text >Badetemperaturer</Text>}
             <Text>sponses av</Text>
-            <View style={{ padding: 20 }}>
-            <Image source={{uri: partnerLogo()}} style={{width: 240, height: 64, resizeMode: 'contain'}} />
+            <View style={styles.space}>
+              <Image source={{uri: partnerLogo()}} style={styles.logo} />
             </View>
           </View>
           ) : null}
