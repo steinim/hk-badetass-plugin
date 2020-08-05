@@ -5,6 +5,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { ActivityIndicator, RefreshControl, Linking, StyleSheet } from 'react-native';
 import axios from 'axios';
 import moment from 'moment';
+import variable from '../../../native-base-theme/variables/material';
+import { typography } from '../../../src/styles';
 
 export const TemperatureList = () => {
   const { authToken, temperatures, setTemperatures, setPreviousArea, previousArea, setSelectedArea, selectedArea } = useBadetass();
@@ -63,6 +65,28 @@ export const TemperatureList = () => {
       justifyContent: 'center',
       alignSelf: 'center',
     },
+    textLarge: {
+      fontSize: 18,
+    },
+    textSmall: {
+      fontSize: 15,
+    },
+    textTemperature: {
+      color: 'red',
+    },
+    textLink: {
+      color: 'blue',
+    },
+    header: {
+      paddingTop: 20,
+    },
+    scrollview: {
+      paddingBottom: 160,
+    },
+    icon: {
+      color: variable.kraftCyan,
+      fontSize: 18,
+    },
   });
 
   return (
@@ -72,14 +96,14 @@ export const TemperatureList = () => {
           {fetching &&
           <View style={styles.loading}>
             <Text>{'\n'}</Text>
-            <ActivityIndicator size = "large" color = "#008cc2"/>
+            <ActivityIndicator size = "large" color = {variable.kraftCyan}/>
             <Text>{'\n'}Sjekker tempen...</Text>
           </View>
           }
           {!fetching &&
-          <ScrollView contentContainerStyle={{paddingBottom: 160}}
+          <ScrollView contentContainerStyle={styles.scrollview}
             refreshControl={
-              <RefreshControl refreshing={false} onRefresh={onRefresh} />
+              <RefreshControl refreshing={false} onRefresh={onRefresh} tintColor="transparent" colors={[ 'transparent' ]}/>
             }
           >
             {temperatures() &&
@@ -88,12 +112,14 @@ export const TemperatureList = () => {
                 .map((item, key) => (
                   <ListItem key={key} accessibilityLabel={item.id + ' item'}>
                     <Text refresh={shouldRefresh} {...item}></Text>
-                    <Text style={{ fontWeight: 'bold' }}>{item.Name}:&nbsp;
-                      <Text style={{ color: 'red' }}>
+                    <Text style={[typography.textBold, styles.textLarge]}>{item.Name}:&nbsp;
+                      <Text style={[typography.textBold, styles.textLarge, styles.textTemperature]}>
                         {item.lastTemperature} °C{'\n'}
-                        <Text style={{ fontWeight: 'normal' }}>Sist målt {moment(item.lastReadingTime).format('DD.MM.YYYY [kl.] HH:mm')}{'\n'}</Text>
-                        <Icon name="pin" style={{ fontSize: 18 }} />
-                        <Text style={{ color: 'blue', fontWeight: 'normal' }}
+                        <Text style={[typography.textLight, styles.textSmall]}>
+                          Sist målt {moment(item.lastReadingTime).format('DD.MM.YYYY [kl.] HH:mm')}{'\n'}
+                        </Text>
+                        <Icon name="pin" style={styles.icon} />
+                        <Text style={[typography.textLight, styles.textSmall, styles.textLink]}
                           // tslint:disable-next-line: max-line-length
                           onPress={() => Linking.openURL('https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=' + item.GPSLat + ',' + item.GPSLong)} >
                           &nbsp;Vis i kart

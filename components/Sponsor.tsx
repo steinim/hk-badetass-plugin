@@ -3,6 +3,7 @@ import { Text, View } from 'native-base';
 import { Image, StyleSheet } from 'react-native';
 import { BadetassContext, useBadetass } from '../BadetassProvider';
 import axios from 'axios';
+import { typography } from '../../../src/styles';
 
 export const Sponsor = () => {
   const { authToken, selectedArea, setPartnerLogo, partnerLogo } = useBadetass();
@@ -52,6 +53,12 @@ export const Sponsor = () => {
     space: {
       padding: 20,
     },
+    textLarge: {
+      fontSize: 18,
+    },
+    scrollview: {
+      paddingBottom: 160,
+    },
   });
 
   return (
@@ -61,9 +68,9 @@ export const Sponsor = () => {
           {partnerLogo()[0] && !fetching ? (
           <View style={styles.center}>
             {selectedArea().label && selectedArea().label !== 'Vis alle' ? (
-            <Text >Badetemperaturer i {selectedArea().label}</Text>
-            ) : <Text >Badetemperaturer</Text>}
-            <Text>sponses av</Text>
+            <Text style={[typography.textLight, styles.textLarge]}>Badetemperaturer i {selectedArea().label}</Text>
+            ) : <Text style={[typography.textLight, styles.textLarge]}>Badetemperaturer</Text>}
+            <Text style={[typography.textLight, styles.textLarge]}>sponses av</Text>
             <View style={styles.space}>
               <Image source={{uri: partnerLogo()}} style={styles.logo} />
             </View>
