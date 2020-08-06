@@ -69,7 +69,8 @@ export const TemperatureList = () => {
       fontSize: 18,
     },
     textSmall: {
-      fontSize: 15,
+      fontSize: 16,
+      fontWeight: 'normal',
     },
     textTemperature: {
       color: 'red',
@@ -77,15 +78,15 @@ export const TemperatureList = () => {
     textLink: {
       color: 'blue',
     },
-    header: {
-      paddingTop: 20,
+    textGrey: {
+      color: 'grey',
     },
     scrollview: {
       paddingBottom: 160,
     },
     icon: {
       color: variable.kraftCyan,
-      fontSize: 18,
+      fontSize: 16,
     },
   });
 
@@ -97,7 +98,7 @@ export const TemperatureList = () => {
           <View style={styles.loading}>
             <Text>{'\n'}</Text>
             <ActivityIndicator size = "large" color = {variable.kraftCyan}/>
-            <Text>{'\n'}Sjekker tempen...</Text>
+            <Text style={[typography.textLight, styles.textLarge]}>{'\n'}Sjekker tempen...</Text>
           </View>
           }
           {!fetching &&
@@ -114,8 +115,8 @@ export const TemperatureList = () => {
                     <Text refresh={shouldRefresh} {...item}></Text>
                     <Text style={[typography.textBold, styles.textLarge]}>{item.Name}:&nbsp;
                       <Text style={[typography.textBold, styles.textLarge, styles.textTemperature]}>
-                        {item.lastTemperature} °C{'\n'}
-                        <Text style={[typography.textLight, styles.textSmall]}>
+                        {item.lastTemperature} °C{'\n'}</Text>
+                        <Text style={[typography.textLight, styles.textSmall, styles.textGrey]}>
                           Sist målt {moment(item.lastReadingTime).format('DD.MM.YYYY [kl.] HH:mm')}{'\n'}
                         </Text>
                         <Icon name="pin" style={styles.icon} />
@@ -123,7 +124,6 @@ export const TemperatureList = () => {
                           // tslint:disable-next-line: max-line-length
                           onPress={() => Linking.openURL('https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=' + item.GPSLat + ',' + item.GPSLong)} >
                           &nbsp;Vis i kart
-                      </Text>
                       </Text>
                     </Text>
                   </ListItem>
