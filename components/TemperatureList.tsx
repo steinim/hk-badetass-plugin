@@ -82,7 +82,7 @@ export const TemperatureList = () => {
       color: 'grey',
     },
     scrollview: {
-      paddingBottom: 160,
+      paddingBottom: 250,
     },
     icon: {
       color: variable.kraftCyan,
