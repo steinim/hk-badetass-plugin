@@ -11,7 +11,7 @@
     },
     "plugin": {
         "name": "Badetassen",
-        "icon": "",
+        "icon": "https://badetassen.no/favicon.ico",
         "description": "Vis badetemperaturer fra badetassen.no"
     },
     "devDependencies": {}
