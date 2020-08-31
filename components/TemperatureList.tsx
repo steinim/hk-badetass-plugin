@@ -5,10 +5,12 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { ActivityIndicator, RefreshControl, Linking, StyleSheet } from 'react-native';
 import axios from 'axios';
 import moment from 'moment';
+import Geolocation from '@react-native-community/geolocation';
+import { orderByDistance } from 'geolib';
 import variable from '../../../native-base-theme/variables/material';
 import { typography } from '../../../src/styles';
 
-export const TemperatureList = () => {
+export const TemperatureList = (): JSX.Element => {
   const { authToken, temperatures, setTemperatures, setPreviousArea, previousArea, setSelectedArea, selectedArea } = useBadetass();
   const [shouldRefresh, setShouldRefresh] = useState(0);
   const [fetching, setShouldFetch] = useState(false);
@@ -21,10 +23,8 @@ export const TemperatureList = () => {
     setShouldFetch(true);
     let fetchUrl = 'https://prdl-apimgmt.lyse.no/apis/t/prod.altibox.lyse.no/temp/1.0/api/location/';
     if (selectedArea().label && selectedArea().label !== 'Vis alle') {
-      console.log('Fetching temperatures from', selectedArea().label);
       fetchUrl = 'https://prdl-apimgmt.lyse.no/apis/t/prod.altibox.lyse.no/temp/1.0/api/area/' + selectedArea().label;
     } else {
-      console.log('Fetching temperatures from all locations');
       setSelectedArea({ value: 9999, label: 'Vis alle'});
     }
 
@@ -36,7 +36,23 @@ export const TemperatureList = () => {
         },
       })
       .then((e) => {
-        setTemperatures(e.data);
+        let locations = e.data.map((item) => {
+          return {
+            id: item.id,
+            areaId: item.Area_id,
+            name: item.Name,
+            latitude: item.GPSLat,
+            longitude: item.GPSLong,
+            pictureURL: item.PictureURL,
+            lastTemperature: item.lastTemperature,
+            lastReadingTime: item.lastReadingTime,
+          };
+        });
+        Geolocation.getCurrentPosition(info => {
+          let currentPosition = { latitude: info.coords.latitude, longitude: info.coords.longitude };
+          let orderedByDistanceLocations = orderByDistance(currentPosition, locations);
+          setTemperatures(orderedByDistanceLocations);
+        });
         setShouldFetch(false);
       })
       .catch((err) => {
@@ -113,7 +129,7 @@ export const TemperatureList = () => {
                 .map((item, key) => (
                   <ListItem key={key} accessibilityLabel={item.id + ' item'}>
                     <Text refresh={shouldRefresh} {...item}></Text>
-                    <Text style={[typography.textBold, styles.textLarge]}>{item.Name}:&nbsp;
+                    <Text style={[typography.textBold, styles.textLarge]}>{item.name}:&nbsp;
                       <Text style={[typography.textBold, styles.textLarge, styles.textTemperature]}>
                         {item.lastTemperature} °C{'\n'}</Text>
                         <Text style={[typography.textLight, styles.textSmall, styles.textGrey]}>
@@ -122,7 +138,7 @@ export const TemperatureList = () => {
                         <Icon name="pin" style={styles.icon} />
                         <Text style={[typography.textLight, styles.textSmall, styles.textLink]}
                           // tslint:disable-next-line: max-line-length
-                          onPress={() => Linking.openURL('https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=' + item.GPSLat + ',' + item.GPSLong)} >
+                          onPress={() => Linking.openURL('https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=' + item.latitude + ',' + item.longitude)} >
                           &nbsp;Vis i kart
                       </Text>
                     </Text>

@@ -5,7 +5,7 @@ import { BadetassContext, useBadetass } from '../BadetassProvider';
 import DropDownPicker from 'react-native-dropdown-picker';
 import axios from 'axios';
 
-export const AreaSelector = () => {
+export const AreaSelector = (): JSX.Element => {
   const { authToken, areas, setAreas, setSelectedArea } = useBadetass();
 
   const fetchAreas = async () => {

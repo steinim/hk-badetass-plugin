@@ -5,7 +5,7 @@ import { BadetassContext, useBadetass } from '../BadetassProvider';
 import axios from 'axios';
 import { typography } from '../../../src/styles';
 
-export const Sponsor = () => {
+export const Sponsor = (): JSX.Element => {
   const { authToken, selectedArea, setPartnerLogo, partnerLogo } = useBadetass();
   const [fetching] = useState();
 

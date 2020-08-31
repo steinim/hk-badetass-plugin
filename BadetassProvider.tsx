@@ -18,6 +18,7 @@ export interface Token {
 export const BadetassProvider = (props: Props) => {
   const [token, setToken] = useState({} as Token);
   const [temperatureState, setTemperatureState] = useState([]);
+  const [closestTemperatureState, setClosestTemperatureState] = useState([]);
   const [areasState, setAreasState] = useState([]);
   const [selectedAreaState, setSelectedAreaState] = useState([]);
   const [previousAreaState, setPreviousAreaState] = useState([]);
@@ -110,6 +111,23 @@ export const BadetassProvider = (props: Props) => {
     setTemperatureState(temps);
   };
 
+  const closestTemperature = () => {
+    return closestTemperatureState;
+  };
+
+  const setClosestTemperature = (ct) => {
+    const _storeData = async (c) => {
+      try {
+        let theClosestTemperature = JSON.stringify(c);
+        await AsyncStorage.setItem('closestTemperatureState', theClosestTemperature);
+      } catch (error) {
+        console.log('save error', error);
+      }
+    };
+    _storeData(ct);
+    setClosestTemperatureState(ct);
+  };
+
   const partnerLogo = () => {
     return partnerLogoState;
   };
@@ -178,6 +196,15 @@ export const BadetassProvider = (props: Props) => {
     };
     loadTemperatures();
 
+    const loadClosestTemperature = async () => {
+      const data = await AsyncStorage.getItem('closestTemperatureState');
+      if (!!data) {
+        const tmps = JSON.parse(data);
+        setClosestTemperature(tmps);
+      }
+    };
+    loadClosestTemperature();
+
     const loadPartnerLogo = async () => {
       const data = await AsyncStorage.getItem('partnerLogo');
       if (!!data) {
@@ -194,6 +221,8 @@ export const BadetassProvider = (props: Props) => {
       authToken,
       temperatures,
       setTemperatures,
+      closestTemperature,
+      setClosestTemperature,
       areas,
       setAreas,
       previousArea,
@@ -203,7 +232,7 @@ export const BadetassProvider = (props: Props) => {
       setSelectedArea,
       setPartnerLogo,
     };
-  }, [token, temperatureState, areasState, previousAreaState, selectedAreaState, partnerLogoState]);
+  }, [token, temperatureState, closestTemperatureState, areasState, previousAreaState, selectedAreaState, partnerLogoState]);
 
   return (
     <BadetassContext.Provider value={value}>
