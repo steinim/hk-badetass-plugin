@@ -94,15 +94,22 @@ export const TemperatureList = (): JSX.Element => {
     textLink: {
       color: 'blue',
     },
-    textGrey: {
-      color: 'grey',
-    },
     scrollview: {
       paddingBottom: 250,
     },
     icon: {
       color: variable.kraftCyan,
       fontSize: 16,
+    },
+    lastReadingTime: {
+      ...typography.textMedium,
+      color: 'grey',
+      opacity: 0.75,
+      fontSize: 12,
+    },
+    temperatureUnit: {
+      ...typography.textMedium,
+      fontSize: 14,
     },
   });
 
@@ -131,15 +138,17 @@ export const TemperatureList = (): JSX.Element => {
                     <Text refresh={shouldRefresh} {...item}></Text>
                     <Text style={[typography.textBold, styles.textLarge]}>{item.name}:&nbsp;
                       <Text style={[typography.textBold, styles.textLarge, styles.textTemperature]}>
-                        {item.lastTemperature} °C{'\n'}</Text>
-                        <Text style={[typography.textLight, styles.textSmall, styles.textGrey]}>
+                        {item.lastTemperature}
+                      </Text>
+                      <Text style={styles.temperatureUnit}> °C{'\n'}</Text>
+                      <Text style={styles.lastReadingTime}>
                           Sist målt {moment(item.lastReadingTime).format('DD.MM.YYYY [kl.] HH:mm')}{'\n'}
-                        </Text>
-                        <Icon name="pin" style={styles.icon} />
-                        <Text style={[typography.textLight, styles.textSmall, styles.textLink]}
-                          // tslint:disable-next-line: max-line-length
-                          onPress={() => Linking.openURL('https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=' + item.latitude + ',' + item.longitude)} >
-                          &nbsp;Vis i kart
+                      </Text>
+                      <Icon name="pin" style={styles.icon} />
+                      <Text style={[typography.textLight, styles.textSmall, styles.textLink]}
+                        // tslint:disable-next-line: max-line-length
+                        onPress={() => Linking.openURL('https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=' + item.latitude + ',' + item.longitude)} >
+                        &nbsp;Vis i kart
                       </Text>
                     </Text>
                   </ListItem>
