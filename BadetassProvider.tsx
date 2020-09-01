@@ -24,7 +24,7 @@ export const BadetassProvider = (props: Props) => {
   const [previousAreaState, setPreviousAreaState] = useState([]);
   const [partnerLogoState, setPartnerLogoState] = useState([]);
 
-  const getToken = async () => {
+/*   const getToken = async () => {
 
     const params = new URLSearchParams();
     params.append('grant_type', 'client_credentials');
@@ -43,6 +43,18 @@ export const BadetassProvider = (props: Props) => {
         return e.data;
       })
       .catch((err) => console.log('error', err));
+  }; */
+
+  // Temporary workaround until we get a better authentication service
+  const getToken = async () => {
+    const t = {
+      'access_token': '3fb5e9e0-deae-3263-9efb-adcb4a9577c7',
+      'scope': 'am_application_scope default',
+      'token_type': 'Bearer',
+      'expires_in': 9223372036854775,
+    };
+    setToken(t);
+    return t;
   };
 
   const areas = () => {
