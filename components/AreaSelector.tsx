@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View } from 'native-base';
+import { View, Text } from 'native-base';
 import { Platform } from 'react-native';
 import { BadetassContext, useBadetass } from '../BadetassProvider';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -50,10 +50,11 @@ export const AreaSelector = (): JSX.Element => {
               dropDownMaxHeight={300}
               searchable={true}
               searchablePlaceholder="Søk ..."
-              searchableError="Finner ikke kommunen"
+              searchableError={() => <Text>Finner ikke kommunen</Text>}
               placeholder="Søk etter kommune ..."
               containerStyle={{ height: 40 }}
               onChangeItem={item => setSelectedArea(item)}
+              itemStyle={{justifyContent: 'flex-start'}}
           ></DropDownPicker>
         </View>
       )}

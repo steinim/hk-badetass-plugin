@@ -69,7 +69,6 @@ const ClosestTemperature = (): JSX.Element => {
       fontSize: 12,
     },
     temperatureContainer: {
-      alignItems: 'center',
       backgroundColor: material.brandPrimary,
       padding: 20,
     },
