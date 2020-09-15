@@ -41,7 +41,6 @@ const ClosestTemperature = (): JSX.Element => {
         Geolocation.getCurrentPosition(info => {
           let currentPosition = { latitude: info.coords.latitude, longitude: info.coords.longitude };
           let nearest = findNearest(currentPosition, locations);
-          console.log(nearest);
           setClosestTemperature(nearest);
         });
       })
