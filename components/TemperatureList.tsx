@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Text, ListItem, Icon, View } from 'native-base';
 import { BadetassContext, useBadetass } from '../BadetassProvider';
 import { ScrollView } from 'react-native-gesture-handler';
-import { ActivityIndicator, RefreshControl, Linking, StyleSheet } from 'react-native';
+import { Platform, ActivityIndicator, RefreshControl, Linking, StyleSheet } from 'react-native';
 import axios from 'axios';
 import moment from 'moment';
+import { PERMISSIONS, request } from 'react-native-permissions';
 import Geolocation from '@react-native-community/geolocation';
 import { orderByDistance } from 'geolib';
 import variable from '../../../native-base-theme/variables/material';
-import { typography } from '../../../src/styles';
+import { typography } from 'styles';
 
 export const TemperatureList = (): JSX.Element => {
   const { authToken, temperatures, setTemperatures, setPreviousArea, previousArea, setSelectedArea, selectedArea } = useBadetass();
@@ -48,11 +49,27 @@ export const TemperatureList = (): JSX.Element => {
             lastReadingTime: item.lastReadingTime,
           };
         });
-        Geolocation.getCurrentPosition(info => {
-          let currentPosition = { latitude: info.coords.latitude, longitude: info.coords.longitude };
-          let orderedByDistanceLocations = orderByDistance(currentPosition, locations);
-          setTemperatures(orderedByDistanceLocations);
-        });
+        try {
+          request(
+              Platform.select({
+                android: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+                ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+              })
+            ).then(res => {
+              if (res === 'granted') {
+                Geolocation.getCurrentPosition(info => {
+                  let currentPosition = { latitude: info.coords.latitude, longitude: info.coords.longitude };
+                  let orderedByDistanceLocations = orderByDistance(currentPosition, locations);
+                  setTemperatures(orderedByDistanceLocations);
+                });
+              } else {
+                console.log('Location is not enabled');
+                setTemperatures(locations);
+              }
+            });
+          } catch (error) {
+            console.log('location set error:', error);
+          }
         setShouldFetch(false);
       })
       .catch((err) => {
@@ -102,13 +119,11 @@ export const TemperatureList = (): JSX.Element => {
       fontSize: 16,
     },
     lastReadingTime: {
-      ...typography.textMedium,
       color: 'grey',
       opacity: 0.75,
       fontSize: 12,
     },
     temperatureUnit: {
-      ...typography.textMedium,
       fontSize: 14,
     },
   });
@@ -140,8 +155,8 @@ export const TemperatureList = (): JSX.Element => {
                       <Text style={[typography.textBold, styles.textLarge, styles.textTemperature]}>
                         {item.lastTemperature}
                       </Text>
-                      <Text style={styles.temperatureUnit}> °C{'\n'}</Text>
-                      <Text style={styles.lastReadingTime}>
+                      <Text style={[styles.temperatureUnit, typography.textMedium]}> °C{'\n'}</Text>
+                      <Text style={[styles.lastReadingTime, typography.textMedium]}>
                           Sist målt {moment(item.lastReadingTime).format('DD.MM.YYYY [kl.] HH:mm')}{'\n'}
                       </Text>
                       <Icon name="pin" style={styles.icon} />

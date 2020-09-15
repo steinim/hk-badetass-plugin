@@ -10,7 +10,6 @@ export const Badetass = (): JSX.Element => {
   return (
     <BadetassProvider>
       <Container style={{ padding: 20 }}>
-        <ClosestTemperature />
         <AreaSelector />
         <Sponsor />
         <TemperatureList />

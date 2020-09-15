@@ -63,23 +63,17 @@ const ClosestTemperature = (): JSX.Element => {
       fontSize: 16,
     },
     lastReadingTime: {
-      ...typography.textWhite,
-      ...typography.textMedium,
       opacity: 0.75,
       fontSize: 12,
     },
     temperatureContainer: {
       backgroundColor: material.brandPrimary,
-      padding: 20,
+      paddingBottom: 20,
     },
     temperature: {
-      ...typography.textWhite,
-      ...typography.textMedium,
       fontSize: 26,
     },
     temperatureUnit: {
-      ...typography.textWhite,
-      ...typography.textMedium,
       fontSize: 18,
     },
   });
@@ -90,11 +84,11 @@ const ClosestTemperature = (): JSX.Element => {
             <View style={styles.temperatureContainer} accessibilityLabel="badetemperatur">
               {closestTemperature() &&
               <Text style={[typography.textBold, typography.textWhite, typography.textCenter]}>{closestTemperature().name}{'\n'}
-                <Text style={styles.lastReadingTime}>
+                <Text style={[typography.textWhite, typography.textMedium, styles.lastReadingTime]}>
                   Sist målt {moment(closestTemperature().lastReadingTime).format('DD.MM.YYYY [kl.] HH:mm')}{'\n'}
                 </Text>
-                <Text style={styles.temperature}>{closestTemperature().lastTemperature}</Text>
-                <Text style={styles.temperatureUnit}> °C{'\n'}</Text>
+                <Text style={[typography.textWhite, typography.textMedium, styles.temperature]}>{closestTemperature().lastTemperature}</Text>
+                <Text style={[typography.textWhite, typography.textMedium, styles.temperatureUnit]}> °C{'\n'}</Text>
                 <Icon name="pin" style={[styles.icon, typography.textLight, typography.textWhite]} />
                 <Text style={[typography.textLight, styles.textSmall, typography.textWhiteCenter]}onPress={() => Linking.openURL('https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=' + closestTemperature().longitude + ',' + closestTemperature().latitude)} >&nbsp;Vis i kart</Text>
               </Text>
